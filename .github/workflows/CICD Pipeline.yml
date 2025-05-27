@@ -8,13 +8,13 @@ permissions:
 on:
   push:
     paths:
-      - 'src/Domains/EventManagement/Api/**'
-      - 'src/Domains/EventManagement/Message/**'
+      - 'src/Api/**'
+      - 'src/Message/**'
   workflow_dispatch:
 
 jobs:
   build-and-publish-api:
-    uses: DomainSoftware/AcmeTickets2025/.github/workflows/Build and Publish Docker Image.yml@master
+    uses: AcmeTickets/.github/workflows/Build and Publish Docker Image.yml@main
     secrets: inherit
     with:
       project_path: src/Domains/EventManagement/Api/Api.csproj
@@ -23,14 +23,14 @@ jobs:
 
   deploy-api:
     needs: build-and-publish-api
-    uses: DomainSoftware/AcmeTickets2025/.github/workflows/Deploy App to Azure Container App.yml@master
+    uses: AcmeTickets/.github/workflows/Deploy App to Azure Container App.yml@main
     secrets: inherit
     with:
       image_tag: ${{ needs.build-and-publish-api.outputs.image_tag }}
       container_app_name: acmetickets2025-api
 
   build-and-publish-message:
-    uses: DomainSoftware/AcmeTickets2025/.github/workflows/Build and Publish Docker Image.yml@master
+    uses: AcmeTickets/.github/workflows/Build and Publish Docker Image.yml@main
     secrets: inherit
     with:
       project_path: src/Domains/EventManagement/Message/Message.csproj
@@ -39,7 +39,7 @@ jobs:
 
   deploy-message:
     needs: build-and-publish-message
-    uses: DomainSoftware/AcmeTickets2025/.github/workflows/Deploy App to Azure Container App.yml@master
+    uses: AcmeTickets/.github/workflows/Deploy App to Azure Container App.yml@main
     secrets: inherit
     with:
       image_tag: ${{ needs.build-and-publish-message.outputs.image_tag }}
