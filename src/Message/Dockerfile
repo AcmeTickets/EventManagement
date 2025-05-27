@@ -5,13 +5,13 @@ USER app
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG configuration=Release
 WORKDIR /src
-COPY ["src/Domains/EventManagement/Message/Message.csproj", "src/Domains/EventManagement/Message/"]
-COPY ["src/Domains/EventManagement/Shared/Shared.csproj", "src/Domains/EventManagement/Shared/"]
-RUN dotnet restore "src/Domains/EventManagement/Message/Message.csproj"
-COPY src/Domains/EventManagement/Message/. /src/Domains/EventManagement/Message/
-COPY src/Domains/EventManagement/Shared/. /src/Domains/EventManagement/Shared/  
-WORKDIR /src/Domains/EventManagement/Message
-RUN ls -l /src/Domains/EventManagement/Message
+COPY ["src/Message/Message.csproj", "src/Message/"]
+COPY ["src/InternalContracts/InternalContracts.csproj", "src/InternalContracts/"]
+RUN dotnet restore "src/Message/Message.csproj"
+COPY src/Message/. /src/Message/
+COPY src/InternalContracts/. /src/InternalContracts/
+WORKDIR /src/Message
+RUN ls -l /src/Message
 RUN dotnet build "Message.csproj" -c $configuration -o /app/build
 
 FROM build AS publish

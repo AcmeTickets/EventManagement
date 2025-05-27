@@ -8,13 +8,13 @@ USER app
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG configuration=Release
 WORKDIR /src
-COPY ["src/Domains/EventManagement/Api/Api.csproj", "src/Domains/EventManagement/Api/"]
-COPY ["src/Domains/EventManagement/Shared/Shared.csproj", "src/Domains/EventManagement/Shared/"]
-RUN dotnet restore "src/Domains/EventManagement/Api/Api.csproj"
-COPY src/Domains/EventManagement/Api/. /src/Domains/EventManagement/Api/
-COPY src/Domains/EventManagement/Shared/. /src/Domains/EventManagement/Shared/
-WORKDIR /src/Domains/EventManagement/Api
-RUN ls -l /src/Domains/EventManagement/Api
+COPY ["src/Api/Api.csproj", "src/Api/"]
+COPY ["src/InternalContracts/InternalContracts.csproj", "src/InternalContracts/"]
+RUN dotnet restore "src/Api/Api.csproj"
+COPY src/Api/. /src/Api/
+COPY src/InternalContracts/. /src/InternalContracts/
+WORKDIR /src/Api
+RUN ls -l /src/Api
 RUN dotnet build "Api.csproj" -c $configuration -o /app/build
 
 FROM build AS publish
