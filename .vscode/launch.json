@@ -6,9 +6,9 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/Message/bin/Debug/net9.0/Message.dll",
+      "program": "${workspaceFolder}/src/Message/bin/Debug/net9.0/Message.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/Message",
+      "cwd": "${workspaceFolder}/src/Message",
       "stopAtEntry": false,
       "console": "integratedTerminal",
       "env": {
