@@ -14,7 +14,7 @@ on:
 
 jobs:
   build-and-publish-api:
-    uses: AcmeTickets/.github/workflows/Build and Publish Docker Image.yml@main
+    uses: AcmeTickets/.github/.github/workflows/Build and Publish Docker Image.yml@main
     secrets: inherit
     with:
       project_path: src/Domains/EventManagement/Api/Api.csproj
@@ -23,14 +23,14 @@ jobs:
 
   deploy-api:
     needs: build-and-publish-api
-    uses: AcmeTickets/.github/workflows/Deploy App to Azure Container App.yml@main
+    uses: AcmeTickets/.github/.github/workflows/Deploy App to Azure Container App.yml@main
     secrets: inherit
     with:
       image_tag: ${{ needs.build-and-publish-api.outputs.image_tag }}
       container_app_name: acmetickets2025-api
 
   build-and-publish-message:
-    uses: AcmeTickets/.github/workflows/Build and Publish Docker Image.yml@main
+    uses: AcmeTickets/.github/.github/workflows/Build and Publish Docker Image.yml@main
     secrets: inherit
     with:
       project_path: src/Domains/EventManagement/Message/Message.csproj
@@ -39,7 +39,7 @@ jobs:
 
   deploy-message:
     needs: build-and-publish-message
-    uses: AcmeTickets/.github/workflows/Deploy App to Azure Container App.yml@main
+    uses: AcmeTickets/.github/.github/workflows/Deploy App to Azure Container App.yml@main
     secrets: inherit
     with:
       image_tag: ${{ needs.build-and-publish-message.outputs.image_tag }}
