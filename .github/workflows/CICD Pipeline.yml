@@ -17,8 +17,8 @@ jobs:
     uses: AcmeTickets/.github/.github/workflows/Build and Publish Docker Image.yml@main
     secrets: inherit
     with:
-      project_path: src/EventManagement/Api/Api.csproj
-      dockerfile_path: src/EventManagement/Api/Dockerfile
+      project_path: src/Api/Api.csproj
+      dockerfile_path: src/Api/Dockerfile
       image_name: ghcr.io/domainsoftware/acmetickets2025-api
 
   deploy-api:
@@ -33,8 +33,8 @@ jobs:
     uses: AcmeTickets/.github/.github/workflows/Build and Publish Docker Image.yml@main
     secrets: inherit
     with:
-      project_path: src/EventManagement/Message/Message.csproj
-      dockerfile_path: src/EventManagement/Message/Dockerfile
+      project_path: src/Message/Message.csproj
+      dockerfile_path: src/Message/Dockerfile
       image_name: ghcr.io/domainsoftware/acmetickets2025-message
 
   deploy-message:
