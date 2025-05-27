@@ -19,7 +19,7 @@ jobs:
     with:
       project_path: src/Api/Api.csproj
       dockerfile_path: src/Api/Dockerfile
-      image_name: ghcr.io/AcmeTickets/acmetickets-api
+      image_name: ghcr.io/acmetickets/acmetickets-api
 
   deploy-api:
     needs: build-and-publish-api
@@ -35,7 +35,7 @@ jobs:
     with:
       project_path: src/Message/Message.csproj
       dockerfile_path: src/Message/Dockerfile
-      image_name: ghcr.io/AcmeTickets/acmetickets-message
+      image_name: ghcr.io/acmetickets/acmetickets-message
 
   deploy-message:
     needs: build-and-publish-message
