@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Console Launch",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/Message/bin/Debug/net9.0/Message.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/Message",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "env": {
+         "DOTNET_ENVIRONMENT": "Development"
+         }
+    }
+  ]
+}

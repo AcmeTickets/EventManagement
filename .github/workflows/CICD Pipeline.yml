@@ -1,0 +1,46 @@
+name: CI-CD Pipeline
+
+
+permissions:
+  contents: read
+  packages: write
+  
+on:
+  push:
+    paths:
+      - 'src/Domains/EventManagement/Api/**'
+      - 'src/Domains/EventManagement/Message/**'
+  workflow_dispatch:
+
+jobs:
+  build-and-publish-api:
+    uses: DomainSoftware/AcmeTickets2025/.github/workflows/Build and Publish Docker Image.yml@master
+    secrets: inherit
+    with:
+      project_path: src/Domains/EventManagement/Api/Api.csproj
+      dockerfile_path: src/Domains/EventManagement/Api/Dockerfile
+      image_name: ghcr.io/domainsoftware/acmetickets2025-api
+
+  deploy-api:
+    needs: build-and-publish-api
+    uses: DomainSoftware/AcmeTickets2025/.github/workflows/Deploy App to Azure Container App.yml@master
+    secrets: inherit
+    with:
+      image_tag: ${{ needs.build-and-publish-api.outputs.image_tag }}
+      container_app_name: acmetickets2025-api
+
+  build-and-publish-message:
+    uses: DomainSoftware/AcmeTickets2025/.github/workflows/Build and Publish Docker Image.yml@master
+    secrets: inherit
+    with:
+      project_path: src/Domains/EventManagement/Message/Message.csproj
+      dockerfile_path: src/Domains/EventManagement/Message/Dockerfile
+      image_name: ghcr.io/domainsoftware/acmetickets2025-message
+
+  deploy-message:
+    needs: build-and-publish-message
+    uses: DomainSoftware/AcmeTickets2025/.github/workflows/Deploy App to Azure Container App.yml@master
+    secrets: inherit
+    with:
+      image_tag: ${{ needs.build-and-publish-message.outputs.image_tag }}
+      container_app_name: acmetickets2025-message
