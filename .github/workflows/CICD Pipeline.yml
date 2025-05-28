@@ -23,7 +23,7 @@ jobs:
 
   deploy-api:
     needs: build-and-publish-api
-    uses: AcmeTickets/.github/.github/workflows/Deploy App to Azure Container App.yml@main
+    uses: AcmeTickets/.github/.github/workflows/Deploy Api to Azure Container App.yml@main
     secrets: inherit
     with:
       image_tag: ${{ needs.build-and-publish-api.outputs.image_tag }}
@@ -39,7 +39,7 @@ jobs:
 
   deploy-message:
     needs: build-and-publish-message
-    uses: AcmeTickets/.github/.github/workflows/Deploy App to Azure Container App.yml@main
+    uses: AcmeTickets/.github/.github/workflows/Deploy Messaging to Azure Container App.yml@main
     secrets: inherit
     with:
       image_tag: ${{ needs.build-and-publish-message.outputs.image_tag }}
