@@ -1,7 +1,13 @@
 name: Deploy to Azure Container App
 
+permissions:
+  contents: read
+  packages: write
+
+
 on:
   workflow_dispatch:
+
 
 env:
   RESOURCE_GROUP: acmetickets_rg
@@ -35,7 +41,7 @@ jobs:
       run: |
         IMAGE_TAG=$(echo "ghcr.io/${{ github.repository }}/api:${{ github.sha }}" | tr '[:upper:]' '[:lower:]')
         echo $IMAGE_TAG
-        echo "${{ steps.app-token.outputs.token }}" | docker login ghcr.io -u x-access-token --password-stdin
+        echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
         docker build -t $IMAGE_TAG -f src/Message/Dockerfile .
         docker push $IMAGE_TAG
         echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
