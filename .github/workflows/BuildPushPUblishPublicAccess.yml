@@ -13,9 +13,8 @@ env:
   RESOURCE_GROUP: acmetickets_rg
   CONTAINERAPPS_ENVIRONMENT: acmeticketsacadev
   AZURE_LOCATION: eastus
-  IMAGE_NAME: acmetickets-api
   REGISTRY: ghcr.io
-  APP_NAME: acmetickets-api
+  APP_NAME: eventmanagement-api
 
 jobs:
   deploy:
