@@ -123,3 +123,4 @@ jobs:
           --name "$APP_NAME" \
           --resource-group "$RESOURCE_GROUP" \
           --image "$IMAGE_TAG"
+          --set-env-vars ASPNETCORE_ENVIRONMENT=Development ConnectionStrings__AzureServiceBus=${{ secrets.AZURE_SERVICEBUS_CONNECTION_STRING }}
