@@ -55,6 +55,11 @@ jobs:
           echo "exists=false" >> $GITHUB_OUTPUT
         fi
 
+    - name: Validate token access to GHCR
+      run: |
+        curl -v -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
+        https://ghcr.io/v2/acmetickets/eventmanagement/api/tags/list
+
     - name: Create Container App (if not exists)
       if: steps.check_aca.outputs.exists == 'false'
       run: |
@@ -69,7 +74,7 @@ jobs:
           --ingress external \
           --target-port 5271 \
           --cpu 0.5 --memory 1.0Gi \
-          --env-vars "ASPNETCORE_ENVIRONMENT=Production"
+          --env-vars ASPNETCORE_ENVIRONMENT=Development ConnectionStrings__AzureServiceBus=${{ secrets.AZURE_SERVICEBUS_CONNECTION_STRING }}
 
     - name: Set registry credentials (for updates)
       if: steps.check_aca.outputs.exists == 'true'
