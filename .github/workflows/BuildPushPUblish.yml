@@ -13,9 +13,8 @@ env:
   RESOURCE_GROUP: acmetickets_rg
   CONTAINERAPPS_ENVIRONMENT: acmeticketsacadev
   AZURE_LOCATION: eastus
-  IMAGE_NAME: acmetickets-api
   REGISTRY: ghcr.io
-  APP_NAME: acmetickets-api
+  APP_NAME: eventmanagement-api
 
 jobs:
   deploy:
@@ -56,7 +55,7 @@ jobs:
 
     - name: Set IMAGE_TAG variable
       run: |
-        IMAGE_TAG=$(echo "ghcr.io/${{ github.repository }}/api:${{ github.sha }}" | tr '[:upper:]' '[:lower:]')
+        IMAGE_TAG=$(echo "ghcr.io/${{ github.repository }}-api:${{ github.sha }}" | tr '[:upper:]' '[:lower:]')
         echo $IMAGE_TAG
         echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
 
