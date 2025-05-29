@@ -48,7 +48,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t $IMAGE_TAG -f ${{ inputs.dockerfile_path }} .
+        docker build -t $IMAGE_TAG -f src/Message/Dockerfile .
 
     - name: Build and push Docker image to GHCR
       run: |
