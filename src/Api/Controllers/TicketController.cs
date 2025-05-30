@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using AcmeTickets2025.Domains.EventManagement.InternalContracts.Events;
+using AcmeTickets.EventManagement.InternalContracts.Events;
 
-namespace AcmeTickets2025.Domains.EventManagement.Api.Controllers
+namespace AcmeTickets.Domains.EventManagement.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
