@@ -10,8 +10,10 @@ ARG configuration=Release
 
 
 WORKDIR /src
-#Copy nuget.config to the root of the source directory
+# Copy nuget.config to the root of the source directory
 COPY nuget.config .
+# Copy nuget.config to the Api project directory
+COPY nuget.config src/Api/
 
 ARG GITHUB_TOKEN
 ENV GITHUB_TOKEN=$GITHUB_TOKEN
