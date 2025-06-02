@@ -5,6 +5,13 @@ USER app
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG configuration=Release
 WORKDIR /src
+WORKDIR /src
+#Copy nuget.config to the root of the source directory
+COPY nuget.config .
+
+ARG GITHUB_TOKEN
+ENV GITHUB_TOKEN=$GITHUB_TOKEN
+
 COPY ["src/Message/Message.csproj", "src/Message/"]
 COPY ["src/InternalContracts/InternalContracts.csproj", "src/InternalContracts/"]
 RUN dotnet restore "src/Message/Message.csproj"

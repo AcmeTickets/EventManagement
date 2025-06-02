@@ -7,7 +7,15 @@ ENV ASPNETCORE_URLS=http://+:5271
 USER app
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG configuration=Release
+
+
 WORKDIR /src
+#Copy nuget.config to the root of the source directory
+COPY nuget.config .
+
+ARG GITHUB_TOKEN
+ENV GITHUB_TOKEN=$GITHUB_TOKEN
+
 COPY ["src/Api/Api.csproj", "src/Api/"]
 COPY ["src/InternalContracts/InternalContracts.csproj", "src/InternalContracts/"]
 RUN dotnet restore "src/Api/Api.csproj"
