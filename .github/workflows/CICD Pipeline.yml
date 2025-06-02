@@ -21,6 +21,7 @@ jobs:
       dockerfile_path: src/Api/Dockerfile
       image_name: ghcr.io/acmetickets/eventmanagement-api
 
+
   deploy-api:
     needs: build-and-publish-api
     uses: AcmeTickets/.github/.github/workflows/Deploy API to Azure Container App.yml@main
@@ -28,6 +29,7 @@ jobs:
     with:
       image_tag: ${{ needs.build-and-publish-api.outputs.image_tag }}
       container_app_name: eventmanagement-api
+      target_port: 5271
 
   build-and-publish-message:
     uses: AcmeTickets/.github/.github/workflows/Build and Publish Docker Image.yml@main
