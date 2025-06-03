@@ -20,7 +20,7 @@ jobs:
       project_path: src/Api/Api.csproj
       dockerfile_path: src/Api/Dockerfile
       image_name: ghcr.io/acmetickets/eventmanagement-api
-
+      target_port: 5271
 
   deploy-api:
     needs: build-and-publish-api
