@@ -1,9 +1,14 @@
 using NServiceBus;
+using EventManagement.Application.Services;
+using EventManagement.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
 builder.Logging.AddConsole();
+
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddScoped<IEventService, EventService>();
 
 var endpointConfiguration = new EndpointConfiguration("EventManagement.Api");
 endpointConfiguration.UseSerialization<SystemJsonSerializer>();
@@ -43,27 +48,6 @@ if (builder.Configuration is IConfigurationRoot configRoot)
         Console.WriteLine();
     }
 }
-
-// Debug: Print all key-value pairs in configuration for ConnectionStrings
-Console.WriteLine("[DEBUG] All ConnectionStrings in configuration:");
-foreach (var kvp in builder.Configuration.GetSection("ConnectionStrings").GetChildren())
-{
-    Console.WriteLine($"  - {kvp.Key}: '{kvp.Value}'");
-}
-
-// Debug: Print all top-level configuration keys
-Console.WriteLine("[DEBUG] All top-level configuration keys:");
-foreach (var section in builder.Configuration.GetChildren())
-{
-    Console.WriteLine($"  - {section.Key}");
-}
-
-// Debug: Print value from configuration
-var configValue = builder.Configuration.GetConnectionString("AzureServiceBus");
-Console.WriteLine($"[DEBUG] Configuration.GetConnectionString: '{configValue}'");
-
-
-
 
 
 var connectionString = builder.Configuration.GetConnectionString("AzureServiceBus")
