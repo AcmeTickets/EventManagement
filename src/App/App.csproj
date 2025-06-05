@@ -15,8 +15,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Api\Api.csproj" />
     <ProjectReference Include="..\Message\Message.csproj" />
-    <ProjectReference Include="../Application/Application.csproj" />
-  <ProjectReference Include="../Infrastructure/Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.Development.json">

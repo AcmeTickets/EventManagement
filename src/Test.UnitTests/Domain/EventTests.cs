@@ -41,10 +41,11 @@ public class EventTests
 
         // Assert
         Assert.Equal(EventStatus.Expired, evt.Status);
-        Assert.Single(evt.DomainEvents);
-        Assert.IsType<EventExpiredEvent>(evt.DomainEvents.First());
-        var domainEvent = (EventExpiredEvent)evt.DomainEvents.First();
-        Assert.Equal(evt.Id, domainEvent.EventId);
+        Assert.Equal(2, evt.DomainEvents.Count);
+        Assert.Contains(evt.DomainEvents, e => e is EventCreatedEvent);
+        Assert.Contains(evt.DomainEvents, e => e is EventExpiredEvent);
+        var expiredEvent = (EventExpiredEvent)evt.DomainEvents.Last(e => e is EventExpiredEvent);
+        Assert.Equal(evt.Id, expiredEvent.EventId);
     }
 
     [Fact]
@@ -69,10 +70,11 @@ public class EventTests
 
         // Assert
         Assert.Equal(EventStatus.Closed, evt.Status);
-        Assert.Single(evt.DomainEvents);
-        Assert.IsType<EventClosedEvent>(evt.DomainEvents.First());
-        var domainEvent = (EventClosedEvent)evt.DomainEvents.First();
-        Assert.Equal(evt.Id, domainEvent.EventId);
+        Assert.Equal(2, evt.DomainEvents.Count);
+        Assert.Contains(evt.DomainEvents, e => e is EventCreatedEvent);
+        Assert.Contains(evt.DomainEvents, e => e is EventClosedEvent);
+        var closedEvent = (EventClosedEvent)evt.DomainEvents.Last(e => e is EventClosedEvent);
+        Assert.Equal(evt.Id, closedEvent.EventId);
     }
 
     [Fact]

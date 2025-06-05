@@ -15,11 +15,11 @@ public class EventService : IEventService
 
     private readonly ISenderService _senderService;
 
-    public EventService(IEventRepository eventRepository, IExternalService externalService, ISenderService _senderService)
+    public EventService(IEventRepository eventRepository, IExternalService externalService, ISenderService senderService)
     {
         _eventRepository = eventRepository;
         _externalService = externalService;
-         _senderService = _senderService;
+        _senderService = senderService;
     }
 
     public async Task<EventDto> AddEventAsync(AddEventCommand command, CancellationToken cancellationToken)
