@@ -21,9 +21,15 @@ ENV GITHUB_TOKEN=$GITHUB_TOKEN
 
 COPY ["src/Api/Api.csproj", "src/Api/"]
 COPY ["src/InternalContracts/InternalContracts.csproj", "src/InternalContracts/"]
+COPY ["src/Application/Application.csproj", "src/Application/"]
+COPY ["src/Infrastructure/Infrastructure.csproj", "src/Infrastructure/"]
+COPY ["src/Domain/Domain.csproj", "src/Domain/"]
 RUN dotnet restore "src/Api/Api.csproj"
 COPY src/Api/. /src/Api/
 COPY src/InternalContracts/. /src/InternalContracts/
+COPY src/Application/. /src/Application/
+COPY src/Infrastructure/. /src/Infrastructure/
+COPY src/Domain/. /src/Domain/
 WORKDIR /src/Api
 RUN ls -l /src/Api
 RUN dotnet build "Api.csproj" -c $configuration -o /app/build
