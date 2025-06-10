@@ -20,7 +20,7 @@ jobs:
     with:
       project_path: src/Api/Api.csproj
       dockerfile_path: src/Api/Dockerfile
-      image_name: ghcr.io/acmetickets/eventmanagement-api
+      image_name: ghcr.io/acmetickets/eventmgmt-api
       target_port: 5271
 
   deploy-api:
@@ -29,7 +29,7 @@ jobs:
     secrets: inherit
     with:
       image_tag: ${{ needs.build-and-publish-api.outputs.image_tag }}
-      container_app_name: eventmanagement-api
+      container_app_name: eventmgmt-api
       target_port: 5271
 
   build-and-publish-message:
@@ -38,7 +38,7 @@ jobs:
     with:
       project_path: src/Message/Message.csproj
       dockerfile_path: src/Message/Dockerfile
-      image_name: ghcr.io/acmetickets/eventmanagement-message
+      image_name: ghcr.io/acmetickets/eventmgmt-msg
 
   deploy-message:
     needs: build-and-publish-message
@@ -46,4 +46,4 @@ jobs:
     secrets: inherit
     with:
       image_tag: ${{ needs.build-and-publish-message.outputs.image_tag }}
-      container_app_name: eventmanagement-message
+      container_app_name: eventmgmt-msg
