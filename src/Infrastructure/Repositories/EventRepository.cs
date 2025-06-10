@@ -15,18 +15,12 @@ public class EventRepository : IEventRepository
 
     public async Task<Event> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        try
-        {
             var response = await _container.ReadItemAsync<Event>(
                 id.ToString(),
                 new PartitionKey(id.ToString()),
                 cancellationToken: cancellationToken);
             return response.Resource;
-        }
-        catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
-        {
-            return null;
-        }
+     
     }
 
     public async Task AddAsync(Event evt, CancellationToken cancellationToken)

@@ -10,52 +10,6 @@ builder.Logging.AddConsole();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<IEventService, EventService>();
 
-var endpointConfiguration = new EndpointConfiguration("EventManagement.Api");
-endpointConfiguration.UseSerialization<SystemJsonSerializer>();
-endpointConfiguration.Conventions()
-    .DefiningEventsAs(type => type.Namespace != null && type.Namespace.EndsWith("Events"))
-    .DefiningCommandsAs(type => type.Namespace != null && type.Namespace.EndsWith("Commands"));
-    
-
-// Debug: Print all environment variables related to connection strings
-foreach (var envVar in Environment.GetEnvironmentVariables().Keys)
-{
-    if (envVar is string key && key.Contains("AzureServiceBus", StringComparison.OrdinalIgnoreCase))
-    {
-        Console.WriteLine($"[DEBUG] Env: {key} = '{Environment.GetEnvironmentVariable(key)}'");
-    }
-}
-
-// Debug: Print all configuration providers and their sources if possible
-if (builder.Configuration is IConfigurationRoot configRoot)
-{
-    Console.WriteLine("[DEBUG] Configuration Providers (detailed):");
-    foreach (var provider in configRoot.Providers)
-    {
-        Console.Write($"  - {provider.GetType().Name}");
-        // Try to print the path for JsonConfigurationProvider
-        if (provider is Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider jsonProvider)
-        {
-            var field = typeof(Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider).GetField("_source", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var source = field?.GetValue(jsonProvider);
-            var pathProp = source?.GetType().GetProperty("Path");
-            var path = pathProp?.GetValue(source) as string;
-            if (!string.IsNullOrEmpty(path))
-            {
-                Console.Write($" (file: {path})");
-            }
-        }
-        Console.WriteLine();
-    }
-}
-
-
-var connectionString = builder.Configuration.GetConnectionString("AzureServiceBus")
-    ?? throw new InvalidOperationException("AzureServiceBus connection string is missing in configuration.");
-var routing = endpointConfiguration.UseTransport(new AzureServiceBusTransport(connectionString, TopicTopology.Default));
-
-
-builder.UseNServiceBus(endpointConfiguration);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddControllers(); // Add support for controllers
@@ -69,15 +23,35 @@ var app = builder.Build();
     app.MapOpenApi(); // Exposes the OpenAPI document at /openapi/v1.json
 if (app.Environment.IsDevelopment())
 {
-
+    var epc = NServiceBusConfigurator.DevelopmentConfiguration(
+    builder.Configuration,
+    "EventManagement.Api",
+    routingSettings =>
+    {
+        // Configure routing settings here if needed
+        // Example: routingSettings.RouteToEndpoint(typeof(MyCommand), "MyDestinationEndpoint");
+    });
+    builder.UseNServiceBus(epc);
     //http://localhost:5271/swagger/index.html
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/openapi/v1.json", "v1");
     });
 }
+else
+{
+    var epc = NServiceBusConfigurator.ProductionConfiguration(
+    builder.Configuration,
+    "EventManagement.Api",
+    routingSettings =>
+    {
+        // Configure routing settings here if needed
+        // Example: routingSettings.RouteToEndpoint(typeof(MyCommand), "MyDestinationEndpoint");
+    });
+    builder.UseNServiceBus(epc);
+}
 
-app.UseHttpsRedirection();
+    app.UseHttpsRedirection();
 app.MapControllers();
 
 var summaries = new[]

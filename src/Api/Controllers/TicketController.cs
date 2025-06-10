@@ -30,6 +30,7 @@ namespace AcmeTickets.Domains.EventManagement.Api.Controllers
         public async Task<ActionResult<EventDto>> GetEvent(Guid id)
         {
             // Placeholder: Implement if needed
+            await Task.CompletedTask;
             return NotFound();
         }
 

@@ -4,31 +4,45 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration.Json;
 using System.Reflection;
 using NServiceBus;
+using EventManagement.Infrastructure;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
 
 builder.Logging.AddConsole();
 
-var endpointConfiguration = new EndpointConfiguration("EventManagement.Message");
-endpointConfiguration.Conventions()
-    .DefiningEventsAs(type => type.Namespace != null && type.Namespace.EndsWith("Events"))
-    .DefiningCommandsAs(type => type.Namespace != null && type.Namespace.EndsWith("Commands"));
-
-var connectionString = builder.Configuration.GetConnectionString("AzureServiceBus");
-if (string.IsNullOrWhiteSpace(connectionString) || !connectionString.Contains("Endpoint=sb://") || !connectionString.Contains("SharedAccessKeyName=") || !connectionString.Contains("SharedAccessKey="))
-{
-    throw new InvalidOperationException("AzureServiceBus connection string is missing, empty, or does not appear to be a valid Azure Service Bus connection string.");
-}
-var transport = endpointConfiguration.UseTransport(new AzureServiceBusTransport(connectionString, TopicTopology.Default));
-endpointConfiguration.UseSerialization<SystemJsonSerializer>();
-
 //endpointConfiguration.AuditProcessedMessagesTo("audit");
 
 // Operational scripting: https://docs.particular.net/transports/azure-service-bus/operational-scripting
 //endpointConfiguration.EnableInstallers();
 
-builder.UseNServiceBus(endpointConfiguration);
+if (builder.Environment.IsDevelopment())
+{
+    var epc = NServiceBusConfigurator.DevelopmentConfiguration(
+    builder.Configuration,
+    "EventManagement.Api",
+    routingSettings =>
+    {
+        // Configure routing settings here if needed
+        // Example: routingSettings.RouteToEndpoint(typeof(MyCommand), "MyDestinationEndpoint");
+    });
+    builder.UseNServiceBus(epc);
+    //http://localhost:5271/swagger/index.html
+
+}
+else
+{
+    var epc = NServiceBusConfigurator.ProductionConfiguration(
+    builder.Configuration,
+    "EventManagement.Api",
+    routingSettings =>
+    {
+        // Configure routing settings here if needed
+        // Example: routingSettings.RouteToEndpoint(typeof(MyCommand), "MyDestinationEndpoint");
+    });
+    builder.UseNServiceBus(epc);
+}
+
 var host = builder.Build();
 
 await host.RunAsync();
