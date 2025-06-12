@@ -21,44 +21,34 @@ builder.Services.AddEndpointsApiExplorer();
 
 // Register infrastructure and NServiceBus BEFORE builder.Build()
 
-if (builder.Environment.IsDevelopment())
+async Task ConfigureNServiceBusAsync(WebApplicationBuilder builder)
 {
-    var epc = NServiceBusConfigurator.DevelopmentConfiguration(
-        builder.Configuration,
-        "EventManagement.Api",
-        routingSettings =>
-        {
-            // Configure routing settings here if needed
-            // Example: routingSettings.RouteToEndpoint(typeof(MyCommand), "MyDestinationEndpoint");
-        });
-    var endpointWithExternallyManagedContainer = EndpointWithExternallyManagedContainer
-        .Create(epc, builder.Services);
+    var endpointConfig = builder.Environment.IsDevelopment()
+        ? NServiceBusConfigurator.DevelopmentConfiguration(
+            builder.Configuration,
+            "EventManagement.Api",
+            routingSettings =>
+            {
+                // Configure routing settings here if needed
+                // Example: routingSettings.RouteToEndpoint(typeof(MyCommand), "MyDestinationEndpoint");
+            })
+        : NServiceBusConfigurator.ProductionConfiguration(
+            builder.Configuration,
+            "EventManagement.Api",
+            routingSettings =>
+            {
+                // Configure routing settings here if needed
+                // Example: routingSettings.RouteToEndpoint(typeof(MyCommand), "MyDestinationEndpoint");
+            });
 
-    builder.Services.AddSingleton(p => endpointWithExternallyManagedContainer.MessageSession.Value);
-    var endpoint = await endpointWithExternallyManagedContainer.Start(builder.Services.BuildServiceProvider());
-
-}
-else
-{
-    var epc = NServiceBusConfigurator.ProductionConfiguration(
-        builder.Configuration,
-        "EventManagement.Api",
-        routingSettings =>
-        {
-            // Configure routing settings here if needed
-            // Example: routingSettings.RouteToEndpoint(typeof(MyCommand), "MyDestinationEndpoint");
-        });
-
-    var endpointWithExternallyManagedContainer = EndpointWithExternallyManagedContainer
-        .Create(epc, builder.Services);
-
-    builder.Services.AddSingleton(p => endpointWithExternallyManagedContainer.MessageSession.Value);
-    var endpoint = await endpointWithExternallyManagedContainer.Start(builder.Services.BuildServiceProvider());
-
+    var endpointWithContainer = EndpointWithExternallyManagedContainer.Create(endpointConfig, builder.Services);
+    builder.Services.AddSingleton(p => endpointWithContainer.MessageSession.Value);
+    await endpointWithContainer.Start(builder.Services.BuildServiceProvider());
 }
 
+await ConfigureNServiceBusAsync(builder);
 
-DependencyInjection.AddInfrastructure(builder.Services, builder.Configuration);
+DependencyInjection.AddInfrastructure(builder.Services, builder.Configuration, builder.Environment.IsDevelopment());
 
 
 var app = builder.Build();

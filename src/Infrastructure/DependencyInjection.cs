@@ -11,16 +11,26 @@ namespace EventManagement.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(IServiceCollection services, IConfiguration configuration, bool isDevelopment)
     {
         // Cosmos DB setup
-        var cosmosConnectionString = configuration["CosmosDb:ConnectionString"];
         var databaseName = configuration["CosmosDb:DatabaseName"];
         var containerName = configuration["CosmosDb:ContainerName"];
 
         services.AddSingleton(sp =>
         {
-            var client = new CosmosClient(cosmosConnectionString);
+            CosmosClient client;
+            if (isDevelopment)
+            {
+                var cosmosConnectionString = configuration["CosmosDb:ConnectionString"];
+                client = new CosmosClient(cosmosConnectionString);
+            }
+            else
+            {
+                var cosmosEndpoint = configuration["CosmosDb:AccountEndpoint"];
+                var credential = new Azure.Identity.DefaultAzureCredential();
+                client = new CosmosClient(cosmosEndpoint, credential);
+            }
             return client;
         });
 

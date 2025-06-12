@@ -70,8 +70,7 @@ else
 }
 
 // Register infrastructure and NServiceBus BEFORE builder.Build()
-DependencyInjection.AddInfrastructure(builder.Services, builder.Configuration);
-
+DependencyInjection.AddInfrastructure(builder.Services, builder.Configuration, builder.Environment.IsDevelopment());
 
 var host = builder.Build();
 
