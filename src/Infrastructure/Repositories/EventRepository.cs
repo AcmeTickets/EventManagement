@@ -25,7 +25,10 @@ public class EventRepository : IEventRepository
 
     public async Task AddAsync(Event evt, CancellationToken cancellationToken)
     {
-        await _container.CreateItemAsync(evt, new PartitionKey(evt.Id.ToString()), cancellationToken: cancellationToken);
+    // Log the evt payload as JSON for debugging
+    var json = System.Text.Json.JsonSerializer.Serialize(evt);
+    Console.WriteLine($"[CosmosDB] Payload: {json}");
+        await _container.CreateItemAsync(evt, new PartitionKey(evt.Id.ToString().ToLower()), cancellationToken: cancellationToken);
     }
 
     public async Task UpdateAsync(Event evt, CancellationToken cancellationToken)
