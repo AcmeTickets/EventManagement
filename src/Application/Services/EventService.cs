@@ -5,7 +5,6 @@ using EventManagement.Domain.Services;
 using EventManagement.Domain.Entities;
 using EventManagement.Domain.Events;
 
-
 namespace EventManagement.Application.Services;
 
 public class EventService : IEventService

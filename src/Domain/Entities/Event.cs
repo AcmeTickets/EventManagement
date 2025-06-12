@@ -1,9 +1,11 @@
 using EventManagement.Domain.Events;
+using Newtonsoft.Json;
 
 namespace EventManagement.Domain.Entities;
 
 public class Event
 {
+    [JsonProperty("id")]
     public Guid Id { get; private set; }
     public string Name { get; private set; }
     public DateTime StartDate { get; private set; }

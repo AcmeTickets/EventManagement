@@ -24,9 +24,13 @@ namespace EventManagement.Infrastructure
 
         public static EndpointConfiguration DevelopmentConfiguration(IConfiguration configuration, string endpointName, Action<RoutingSettings<AzureServiceBusTransport>> routingSettingsConfiguration)
         {
+            // Debug: Log the connection string value and all config sources
+            var connectionString = configuration.GetConnectionString("AzureServiceBus");
+            Console.WriteLine($"[NServiceBusConfigurator] AzureServiceBus connection string: '{connectionString}'");
+     
+            if (connectionString == null)
+                throw new InvalidOperationException("AzureServiceBus connection string is missing in configuration.");
             var endpointConfiguration = CreateEndpointConfiguration(endpointName);
-            var connectionString = configuration.GetConnectionString("AzureServiceBus")
-                ?? throw new InvalidOperationException("AzureServiceBus connection string is missing in configuration.");
             var transport = new AzureServiceBusTransport(connectionString, TopicTopology.Default);
             var transportExtensions = endpointConfiguration.UseTransport(transport);
          //   routingSettingsConfiguration(transportExtensions.Routing());
