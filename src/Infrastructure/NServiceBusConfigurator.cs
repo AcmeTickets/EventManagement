@@ -44,6 +44,9 @@ namespace EventManagement.Infrastructure
             endpointConfiguration.Conventions()
                 .DefiningEventsAs(type => type.Namespace != null && type.Namespace.EndsWith("Events"))
                 .DefiningCommandsAs(type => type.Namespace != null && type.Namespace.EndsWith("Commands"));
+            endpointConfiguration.SetDiagnosticsPath("/tmp");
+            var licensePath = Path.Combine(AppContext.BaseDirectory, "License.xml");
+            endpointConfiguration.LicensePath(licensePath);
             return endpointConfiguration;
         }
     }

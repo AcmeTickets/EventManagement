@@ -6,11 +6,11 @@ using EventManagement.Domain.Events;
 
 namespace AcmeTickets.Message.Handlers
 {
-    public class EventCreatedEventHander : IHandleMessages<EventCreatedEvent>
+    public class EventCreatedEventHandler : IHandleMessages<EventCreatedEvent>
     {
-        private readonly ILogger<AddEventHandler> _logger;
+        private readonly ILogger<EventCreatedEventHandler> _logger;
 
-        public EventCreatedEventHander(ILogger<AddEventHandler> logger)
+        public EventCreatedEventHandler(ILogger<EventCreatedEventHandler> logger)
         {
             _logger = logger;
         }

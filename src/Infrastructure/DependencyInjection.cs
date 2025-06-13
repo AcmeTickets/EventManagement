@@ -14,8 +14,8 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(IServiceCollection services, IConfiguration configuration, bool isDevelopment)
     {
         // Cosmos DB setup
-        var databaseName = configuration["CosmosDb:DatabaseName"];
-        var containerName = configuration["CosmosDb:ContainerName"];
+        var databaseName = configuration["CosmosDb:DatabaseName"] ?? throw new InvalidOperationException("CosmosDb:DatabaseName is missing in configuration.");
+        var containerName = configuration["CosmosDb:ContainerName"] ?? throw new InvalidOperationException("CosmosDb:ContainerName is missing in configuration.");
 
         services.AddSingleton(sp =>
         {
@@ -58,16 +58,7 @@ public static class DependencyInjection
        // services.AddSingleton<ISenderService, NServiceBusEventPublisher>();
 
         // Register IEventService using EventService and resolve ISenderService from the accessor if not provided by DI
-        services.AddScoped<IEventService>(sp =>
-        {
-            var eventRepository = sp.GetRequiredService<IEventRepository>();
-            var externalService = sp.GetRequiredService<IExternalService>();
-            // var senderService = sp.GetRequiredService<NServiceBusEventPublisher>();
-            var messageSession = sp.GetRequiredService<IMessageSession>();
-            var senderService = new NServiceBusEventPublisher(messageSession);
-            // Use the static accessor for ISenderService (externally managed mode)
-            return new EventService(eventRepository, externalService, senderService);
-        });
+ 
 
 
         return services;

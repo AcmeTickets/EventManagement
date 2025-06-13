@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<license type="Non-Production Development" Applications="All" expiration="2025-09-11" id="dc6c460a-f5aa-429b-bc54-6c79a59f3126">
+  <name>steven.suing@ais.com</name>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+      <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+      <Reference URI="">
+        <Transforms>
+          <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+        </Transforms>
+        <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <DigestValue>4r+QAsISR0HR3Nrg0fPDUAKn7cQ=</DigestValue>
+      </Reference>
+    </SignedInfo>
+    <SignatureValue>n/Ey20Yt4u3tvVnDXoG72RAiiWbmFO0ISkZaKsA16iV35d9HnnXJNM3CaMPpaYoclAaC+nrJIkGeFokFIv4ZnLhfTeonmkJE7awXyxQyw4i4V8kP/Y3wat4dyam3sULgfZ58DSDWzlDnS1abKcDKm/SPoAWVv9zHDiDcoFWQTj8=</SignatureValue>
+  </Signature>
+</license>

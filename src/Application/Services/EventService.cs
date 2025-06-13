@@ -29,7 +29,7 @@ public class EventService : IEventService
         // TODO: Implement outbox pattern by persisting domain events to Cosmos DB
         foreach (var domainEvent in evt.DomainEvents)
         {
-            _senderService.PublishAsync<DomainEvent>(domainEvent);
+            await _senderService.PublishAsync<DomainEvent>(domainEvent);
         }
         evt.ClearDomainEvents();
 

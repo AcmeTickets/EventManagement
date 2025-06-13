@@ -6,11 +6,11 @@ namespace EventManagement.Domain.Entities;
 public class Event
 {
     [JsonProperty("id")]
-    public Guid Id { get; private set; }
-    public string Name { get; private set; }
-    public DateTime StartDate { get; private set; }
-    public DateTime EndDate { get; private set; }
-    public EventStatus Status { get; private set; }
+    public required Guid Id { get; set; }
+    public required string Name { get; set; }
+    public required DateTime StartDate { get; set; }
+    public required DateTime EndDate { get; set; }
+    public required EventStatus Status { get; set; }
     private readonly List<DomainEvent> _domainEvents = new();
 
     public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents.AsReadOnly();

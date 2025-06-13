@@ -29,4 +29,11 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />  
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\License.xml">
+      <Link>License.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
