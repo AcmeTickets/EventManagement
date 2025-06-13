@@ -32,6 +32,8 @@ COPY src/Infrastructure/. /src/Infrastructure/
 COPY src/Domain/. /src/Domain/
 WORKDIR /src/Api
 RUN ls -l /src/Api
+# Copy License.xml from the root of the repo to the build context
+COPY ../../License.xml /License.xml
 RUN dotnet build "Api.csproj" -c $configuration -o /app/build
 
 FROM build AS publish

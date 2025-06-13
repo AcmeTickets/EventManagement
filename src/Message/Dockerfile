@@ -24,6 +24,8 @@ COPY src/InternalContracts/. /src/InternalContracts/
 COPY src/Application/. /src/Application/
 COPY src/Infrastructure/. /src/Infrastructure/
 COPY src/Domain/. /src/Domain/
+# Copy License.xml from the root of the repo to the build context
+COPY ../../License.xml /License.xml
 WORKDIR /src/Message
 RUN ls -l /src/Message
 RUN dotnet build "Message.csproj" -c $configuration -o /app/build
