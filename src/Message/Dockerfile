@@ -37,4 +37,5 @@ RUN dotnet publish "Message.csproj" -c $configuration -o /app/publish /p:UseAppH
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+EXPOSE 8080
 ENTRYPOINT ["dotnet", "Message.dll"]
