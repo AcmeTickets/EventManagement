@@ -33,7 +33,6 @@ DependencyInjection.AddInfrastructure(builder.Services, builder.Configuration, b
 
 var app = builder.Build();
 
-// Store the running endpoint instance
 IEndpointInstance? runningEndpoint = null;
 
 // Start NServiceBus endpoint when the application starts
@@ -48,7 +47,7 @@ app.Lifetime.ApplicationStopping.Register(async () =>
 {
     if (runningEndpoint != null)
     {
-        await runningEndpoint.Stop(TimeSpan.FromSeconds(30)); // Specify a graceful stop timeout
+        await runningEndpoint.Stop(TimeSpan.FromSeconds(30));
     }
 });
 
@@ -67,21 +66,24 @@ app.MapControllers();
 
 await app.RunAsync();
 
+// NServiceBus configuration helper
 EndpointConfiguration ConfigureNServiceBus(WebApplicationBuilder builder)
 {
+    var endpointName = "EventManagement.Api";
+    var messageEndpoint = "EventManagement.Message";
     return builder.Environment.IsDevelopment()
         ? NServiceBusConfigurator.DevelopmentConfiguration(
             builder.Configuration,
-            "EventManagement.Api",
+            endpointName,
             routingSettings =>
             {
-                routingSettings.RouteToEndpoint(typeof(EventCreatedEvent), "EventManagement.Message");
+                routingSettings.RouteToEndpoint(typeof(EventCreatedEvent), messageEndpoint);
             })
         : NServiceBusConfigurator.ProductionConfiguration(
             builder.Configuration,
-            "EventManagement.Api",
+            endpointName,
             routingSettings =>
             {
-                routingSettings.RouteToEndpoint(typeof(EventCreatedEvent), "EventManagement.Message");
+                routingSettings.RouteToEndpoint(typeof(EventCreatedEvent), messageEndpoint);
             });
 }

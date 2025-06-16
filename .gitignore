@@ -54,3 +54,5 @@ TestResult.xml
 nunit-*.xml
 
 appsettings.Development.json
+[Tt]est[Rr]esults/
+*.trx

@@ -28,22 +28,18 @@ var endpointConfig = builder.Environment.IsDevelopment()
         "EventManagement.Message",
         routingSettings =>
         {
-            // Example: Configure routing for events if needed
-            // routingSettings.RouteToEndpoint(typeof(MyCommand), "MyDestinationEndpoint");
+            // Configure routing for events if needed
         })
     : NServiceBusConfigurator.ProductionConfiguration(
         builder.Configuration,
         "EventManagement.Message",
         routingSettings =>
         {
-            // Example: Configure routing for events if needed
-            // routingSettings.RouteToEndpoint(typeof(MyCommand), "MyDestinationEndpoint");
+            // Configure routing for events if needed
         });
 
-// Create and register NServiceBus endpoint
-var startableEndpoint = EndpointWithExternallyManagedContainer.Create(endpointConfig, builder.Services);
-
 // Register NServiceBus dependencies
+var startableEndpoint = EndpointWithExternallyManagedContainer.Create(endpointConfig, builder.Services);
 builder.Services.AddSingleton<IStartableEndpointWithExternallyManagedContainer>(startableEndpoint);
 builder.Services.AddSingleton<IMessageSession>(sp => sp.GetRequiredService<IStartableEndpointWithExternallyManagedContainer>().MessageSession.Value);
 builder.Services.AddScoped<ISenderService, NServiceBusEventPublisher>();
@@ -64,7 +60,7 @@ var healthCheckTask = Task.Run(() =>
 {
     var healthApp = WebApplication.CreateBuilder().Build();
     healthApp.MapGet("/healthz", () => nserviceBusHostedService.IsHealthy ? Results.Ok("Healthy") : Results.StatusCode(503));
-    healthApp.Run("http://0.0.0.0:8080"); // Use a port not used by your main app
+    healthApp.Run("http://0.0.0.0:8080");
 });
 
 // Log startup
@@ -92,7 +88,6 @@ public class NServiceBusHostedService : IHostedService
         _logger = logger;
         _serviceProvider = serviceProvider;
         _isHealthy = false;
-
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
